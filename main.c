@@ -82,7 +82,7 @@ int contarLiteralPositivo(char * expressao)
     return 1;
 }
 
-void adicionarAoGrupo(char  grupo[][300], char * positivos)
+void adicionarAoGrupo(char  grupo[][300], char * positivos)// +,Q,P     P       Q
 {
     int i,u;
     bool existe=false;
@@ -102,7 +102,7 @@ void adicionarAoGrupo(char  grupo[][300], char * positivos)
 }
 //M e Q -> P    Grupo: +, M, Q   entao adiciona P
 //A e B -> C    Grupo: +, A    então não faz nada porque B não está no grupo
-int compararGrupo(char  grupo[][300],char * negativos,char * positivos)
+int compararGrupo(char  grupo[][300],char * negativos,char * positivos)//  +,Q,P     P Q R -> A
 {
     bool existe=false;
     int i,u;
@@ -126,7 +126,7 @@ int compararGrupo(char  grupo[][300],char * negativos,char * positivos)
     return 1;
 }
 
-int verBottom(char  grupo[][300],char * negativos)
+int verBottom(char  grupo[][300],char * negativos)// +,p,q ... q p  -> -
 {
     bool existe=false;
     int i,u;
@@ -188,6 +188,7 @@ void satOrUnsat(IMPLICA * A, char  grupo[][300],int numeroExpressoes,bool * temB
         }
     }
 }
+
 int main(void)
 {
     char buffer[60000];
