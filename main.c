@@ -13,9 +13,16 @@ typedef struct IMPLICA
 
 /*ASCII -> A to Z: 65 a 90
         -> a to z: 97 a 122*/
-/*(~m | ~R | ~T | ~K | ~C | ~c | c) & (V)
+/*
 TOP = + 
-BOT = - */
+BOT = - 
+*/
+
+/**
+ * Esta função vai pegar na expressão inicial e dividila em varias estruturas do tipo IMPLICA
+ * @param expressao Expressão inicial que é passada do stdin
+ * @param A[][300] Estrutura para o qual se vai aplicar a expressão e dividir em varias sub expressões mais pequenas ( ... ) 
+*/
 void separarExpressaoGrande(char * expressao, IMPLICA A[][300],int * numeroExp)
 {
     //printf("Entrou no for\n");~
@@ -30,7 +37,11 @@ void separarExpressaoGrande(char * expressao, IMPLICA A[][300],int * numeroExp)
         }
     }
 }
-
+/**
+ * Esta função vai devolver um tipo IMPLICA com os varios literais negativos e positivos já divididos
+ * @param expressao Expressão a avaliar, pelo qual a estrutura IMPLICA se vai basear de forma a construir os literais positivos e negativos
+ * @return Estrutura IMPLICA já avaliada nos literais
+*/
 IMPLICA separarExpressaoInicial(char * expressao)
 {
     int i,u;
@@ -74,7 +85,11 @@ IMPLICA separarExpressaoInicial(char * expressao)
     }
     return A;
 }
-
+/**
+ * Função que apenas conta se a expressão tem mais do que um literal positivo
+ * @param expressao Expressão a analisar
+ * @return -1 se tem dois ou mais literais e 1 se tem o contrario
+*/
 int contarLiteralPositivo(char * expressao)
 {
     if(strlen(expressao) >=2)
@@ -82,6 +97,11 @@ int contarLiteralPositivo(char * expressao)
     return 1;
 }
 
+/**
+ * Função que vai adicionar ao Conjunto dos literais comparados os literais positivos que passaram a verificação
+ * @param grupo Conjunto inicial com o top ( + )
+ * @param positivos Conjunto de literais positivos a serem adicionados
+*/
 void adicionarAoGrupo(char  grupo[][300], char * positivos)// +,Q,P     P       Q
 {
     int i,u;
@@ -100,8 +120,13 @@ void adicionarAoGrupo(char  grupo[][300], char * positivos)// +,Q,P     P       
         }
     }
 }
-//M e Q -> P    Grupo: +, M, Q   entao adiciona P
-//A e B -> C    Grupo: +, A    então não faz nada porque B não está no grupo
+/**
+ * Função que vai adicionar ao Conjunto dos literais, caso passem a verificação dos literais negativos, então, vai adicionar os positivos ao Conjunto
+ * @param grupo Conjunto do top e outros literais que foram adicionados
+ * @param negativos Conjunto de literais da expressão negativos
+ * @param positivos Conjunto de literais da expressão positivos
+ * @return -1 se não foi adicionado nenhum literal ao Conjunto e 1 se foi possivel adicionar algum literal ao Conjunto
+*/
 int compararGrupo(char  grupo[][300],char * negativos,char * positivos)//  +,Q,P     P Q R -> A
 {
     bool existe=false;
@@ -126,6 +151,13 @@ int compararGrupo(char  grupo[][300],char * negativos,char * positivos)//  +,Q,P
     return 1;
 }
 
+/**
+ * Função que verifica o Conjunto dos literais, caso haja o mesmo numero de literais aos negativos então a função pode ter um bottom e sair UNSAT
+ * @param grupo Conjuto dos literais que ja sofreram modificação
+ * @param negativos Conjunto de negativos a serem comparados
+ * @return -1 se nao for possivel adicionar o bottom e 1 se for possivel por o bottom 
+*/
+
 int verBottom(char  grupo[][300],char * negativos)// +,p,q ... q p  -> -
 {
     bool existe=false;
@@ -135,7 +167,6 @@ int verBottom(char  grupo[][300],char * negativos)// +,p,q ... q p  -> -
         existe=false;
         for(u=0;u<strlen(*grupo);u++)
         {
-            //printf("grupo: %c vs %c neg\n",(grupo)[u],negativos[i]);
             if((*grupo)[u] == negativos[i])
             {
                 
@@ -144,18 +175,23 @@ int verBottom(char  grupo[][300],char * negativos)// +,p,q ... q p  -> -
         }
         if(!existe)
         {
-            //printf("-1\n");
             return -1;
         }
     }
-    //printf("Um\n");
     return 1;
 }
 
+/**
+ * Função que verifica se a expressão é sat ou unsat
+ * @param A Array de expressões a serem avaliadas
+ * @param grupo Conjunto inicial dos literais, começa sempre com o top ( + )
+ * @param numeroExpressoes Numero das expressoes que foram separadas para as estruturas do tipo IMPLICA
+ * @param temBot temBot é usado como variavel de controlo no main para imprimir unsat ou sat
+*/
 void satOrUnsat(IMPLICA * A, char  grupo[][300],int numeroExpressoes,bool * temBot) //grupo = "+"
 {
     int i;
-    for(i=0;i<numeroExpressoes;i++)//Tratar os negativos
+    for(i=0;i<numeroExpressoes;i++)
     {
         if(A[i].verificado == 0)
         {
@@ -191,18 +227,23 @@ void satOrUnsat(IMPLICA * A, char  grupo[][300],int numeroExpressoes,bool * temB
 
 int main(void)
 {
-    char buffer[60000];
-    IMPLICA Arr[300];
+    //Numero de expressões pelo qual vai ser usado para controlar noutras funções
     int numeroExp=0,i; 
+    //Buffer para o qual se vai passar a expressão inicial passada pelo stdin
+    char buffer[60000];
+    //Buffer do conjunto de literais
+    char grupo[300];
+    //Arrays de sub expressões divididas
+    IMPLICA Arr[300];
     IMPLICA ArrFinal[300];
-    IMPLICA Decoy;
+    IMPLICA Decoy; //Variavel apenas usada para "limpar" os arrays
     strcpy(Decoy.expressao,"");
     strcpy(Decoy.negativos,"");
     strcpy(Decoy.positivos,"");
     Decoy.verificado=0;
-    char grupo[300];
+    //variaveis de controlo para printar NA,SAT ou UNSAT
     bool NA=false,temBot=false;
-
+    //ler expressão a expressão
     while(fgets(buffer,60000,stdin))
     {
         for(i=0;i < 300;i++)
@@ -217,7 +258,6 @@ int main(void)
         separarExpressaoGrande(buffer,&Arr,&numeroExp);
         for(i = 0;i < numeroExp;i++)
         {
-            //printf("Expressão: %d\n",i+1);
             ArrFinal[i] = separarExpressaoInicial(Arr[i].expressao);
             ArrFinal[i].verificado=0;
             if(contarLiteralPositivo(ArrFinal[i].positivos)==-1)
