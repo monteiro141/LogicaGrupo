@@ -3,12 +3,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-/**
- * a44149 Alexandre Monteiro
- * a43464 Cristiano Santos
- * PL3
-*/
-
 typedef struct IMPLICA
 {
     char expressao[1000];
@@ -29,7 +23,7 @@ BOT = -
  * @param expressao Expressão inicial que é passada do stdin
  * @param A[][300] Estrutura para o qual se vai aplicar a expressão e dividir em varias sub expressões mais pequenas ( ... ) 
 */
-void separarExpressaoGrande(char * expressao, IMPLICA A[][1000],int * numeroExp)
+void separarExpressaoGrande(char * expressao, IMPLICA A[][300],int * numeroExp)
 {
     //printf("Entrou no for\n");~
     for(int i = 0;i < strlen(expressao);i++)
@@ -108,7 +102,7 @@ int contarLiteralPositivo(char * expressao)
  * @param grupo Conjunto inicial com o top ( + )
  * @param positivos Conjunto de literais positivos a serem adicionados
 */
-void adicionarAoGrupo(char  grupo[][1000], char * positivos)// +,Q,P     P       Q
+void adicionarAoGrupo(char  grupo[][300], char * positivos)// +,Q,P     P       Q
 {
     int i,u;
     bool existe=false;
@@ -133,7 +127,7 @@ void adicionarAoGrupo(char  grupo[][1000], char * positivos)// +,Q,P     P      
  * @param positivos Conjunto de literais da expressão positivos
  * @return -1 se não foi adicionado nenhum literal ao Conjunto e 1 se foi possivel adicionar algum literal ao Conjunto
 */
-int compararGrupo(char  grupo[][1000],char * negativos,char * positivos)//  +,Q,P     P Q R -> A
+int compararGrupo(char  grupo[][300],char * negativos,char * positivos)//  +,Q,P     P Q R -> A
 {
     bool existe=false;
     int i,u;
@@ -164,7 +158,7 @@ int compararGrupo(char  grupo[][1000],char * negativos,char * positivos)//  +,Q,
  * @return -1 se nao for possivel adicionar o bottom e 1 se for possivel por o bottom 
 */
 
-int verBottom(char  grupo[][1000],char * negativos)// +,p,q ... q p  -> -
+int verBottom(char  grupo[][300],char * negativos)// +,p,q ... q p  -> -
 {
     bool existe=false;
     int i,u;
@@ -194,7 +188,7 @@ int verBottom(char  grupo[][1000],char * negativos)// +,p,q ... q p  -> -
  * @param numeroExpressoes Numero das expressoes que foram separadas para as estruturas do tipo IMPLICA
  * @param temBot temBot é usado como variavel de controlo no main para imprimir unsat ou sat
 */
-void satOrUnsat(IMPLICA * A, char  grupo[][1000],int numeroExpressoes,bool * temBot) //grupo = "+"
+void satOrUnsat(IMPLICA * A, char  grupo[][300],int numeroExpressoes,bool * temBot) //grupo = "+"
 {
     int i;
     for(i=0;i<numeroExpressoes;i++)
@@ -238,10 +232,10 @@ int main(void)
     //Buffer para o qual se vai passar a expressão inicial passada pelo stdin
     char buffer[60000];
     //Buffer do conjunto de literais
-    char grupo[1000];
+    char grupo[300];
     //Arrays de sub expressões divididas
-    IMPLICA Arr[1000];
-    IMPLICA ArrFinal[1000];
+    //IMPLICA Arr[300];
+    //IMPLICA ArrFinal[300];
     IMPLICA Decoy; //Variavel apenas usada para "limpar" os arrays
     strcpy(Decoy.expressao,"");
     strcpy(Decoy.negativos,"");
@@ -252,11 +246,13 @@ int main(void)
     //ler expressão a expressão
     while(fgets(buffer,60000,stdin))
     {
-        for(i=0;i < 1000;i++)
+        /*for(i=0;i < 300;i++)
         {
             Arr[i] = Decoy;
             ArrFinal[i] = Decoy;
-        }
+        }*/
+        IMPLICA Arr[300]={};
+        IMPLICA ArrFinal[300]={};
         NA=false;
         temBot=false;
         strcpy(grupo,"+");
