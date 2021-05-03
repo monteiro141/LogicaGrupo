@@ -1,4 +1,4 @@
-### Input / Output
+### Input
 Inicialmente trabalhamos o input singularmente, onde cada expressão é trabalhada antes da entrada da próxima.
 ### Expressão para sub-expressões
 Passo a passo, ao receber a expressão do input vamos separar em cada sub-expressão (por parêntesis). Pegando nessa sub-expressão, vamos calcular os literais negativos e positivos para mais tarde serem trabalhados em "grupo".
