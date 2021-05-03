@@ -1,52 +1,6 @@
-# LogicaGrupo
-Este trabalho foi realizado no âmbito da cadeira de Lógica Computacional da Universidade da Beira Interior.
-
-Autores : 
-- Cristiano Santos, nº43464
-- Alexandre Monteiro, nº44149
-
-## Enunciado do trabalho desenvolvido
-
-O objectivo deste trabalho é implementar o algoritmo de Horn. Dada uma fórmula, o
-programa deverá verificar se é fórmula de Horn e:
-- Se é fórmula de Horn, deverá determinar e indicar se a fórmula é possível ou contraditória.
-- Se não é fórmula de Horn, deverá indicar que o algoritmo não é aplicável.
-Na secção seguinte são apresentados os detalhes relativos ao input que o programa terá de processar e ao output esperado
-
-### INPUT
-
-O input consistirá em fórmulas na forma normal conjuntiva, uma por linha, onde cada
-conectivo é representado da seguinte forma:
-- ¬ é representado por ~
-- ∧ é representado por &
-- ∨ é representado por |
-
-São usados parêntises para delimitar as disjunções e as fórmulas terão no máximo 100 cláusulas.
-Os literais, positivos ou negativos, podem estar repetidos numa disjunção. Por exemplo, a
-fórmula (¬p ∨ Q ∨ Q) ∧ (¬t) deve ser considerada fórmula de Horn.
-
-O input vai ser introduzido através do standard input. Exemplo de input:
-(~p | Q | ~r) & (~t) & (P) & (~T | x | Z) & (F)
-(~p | R ) & (~x) & (p) & (~p | x | ~R | x)
-(~p | a ) & (p) & (~p | ~R | x) & (~W | P | ~h) & (F) & (~f |~q | e) & (~t |
-~k | ~l)
-
-### OUTPUT
-
-O programa deverá produzir como output:
-- SAT, se a fórmula é possível
-- UNSAT, se a fórmula é contraditória
-- NA, se a fórmula não é fórmula de Horn
-
-Cada output tem de ser seguido do caracter de newline (‘\n’), caso contrário, mesmo que
-a resposta esteja correcta, será rejeitada.
-
-Output esperado para o exemplo de input anterior:
-NA
-UNSAT
-SAT
-
-### Linguagem de Programação usada e instrução de execução
-O programa foi desenvolvido em C(standard C99).
-Para compilar use o seguinte comando, (onde main.c é substituído pelo nome do seu ficheiro):
-- gcc -o main main.c -Wall -std=c99 -lm
+Inicialmente trabalhamos o input singularmente, onde cada expressão é trabalhada antes da entrada da próxima.
+Passo a passo, ao receber a expressão do input vamos separar em cada sub-expressão (por parêntesis). Pegando nessa sub-expressão, vamos calcular os literais negativos e positivos para mais tarde serem trabalhados em "grupo".
+A primeira verificação é o NA, essa verificação consistem em contar quantos literais positivos existem numa sub-expressão, caso seja maior ou igual a dois, então a expressão inicial é NA sem necessitar de verificar UNSAT ou SAT.
+A próxima verificação, caso não seja NA, consiste em pegar cada sub-expressão e "tentar" adicionar os literais positivos das sub-expressões a um "grupo" com um TOP ( + ) inicial.
+Aplicando o algoritmo de horn e adicionando os literais positivos, chega-se a uma conclusão, caso por ventura se consiga adicionar um BOT ( - ) ao nosso "grupo", então a expressão é UNSAT e um boolean "temBot" é true e o output final é UNSAT.
+Caso o algoritmo de horn chegue ao final e todas as sub-expressões estejam verificadas, então o output final é SAT.
